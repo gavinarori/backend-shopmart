@@ -1,0 +1,19 @@
+{
+  "name": "backend-shopmart",
+  "version": "1.0.0",
+  "description": "online shop for businesses",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gavinarori/backend-shopmart.git"
+  },
+  "author": "Gavin Arori",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gavinarori/backend-shopmart/issues"
+  },
+  "homepage": "https://github.com/gavinarori/backend-shopmart#readme"
+}
