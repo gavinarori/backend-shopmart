@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/gavinarori/backend-shopmart/issues"
   },
-  "homepage": "https://github.com/gavinarori/backend-shopmart#readme"
+  "homepage": "https://github.com/gavinarori/backend-shopmart#readme",
+  "dependencies": {
+    "mongoose": "^8.8.4"
+  }
 }
