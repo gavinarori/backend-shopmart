@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/gavinarori/backend-shopmart#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
+    "formidable": "^3.5.2",
     "mongoose": "^8.8.4"
   }
 }
