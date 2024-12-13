@@ -4,7 +4,8 @@
   "description": "online shop for businesses",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "server": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -16,11 +17,23 @@
     "url": "https://github.com/gavinarori/backend-shopmart/issues"
   },
   "homepage": "https://github.com/gavinarori/backend-shopmart#readme",
-  "dependencies": {
+ "dependencies": {
     "bcrypt": "^5.1.1",
-    "cloudinary": "^2.5.1",
-    "formidable": "^3.5.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.4"
+    "body-parser": "^1.20.3",
+    "cloudinary": "^1.36.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.21.1",
+    "formidable": "^2.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "mongoose": "^7.8.2",
+    "socket.io": "^4.8.1",
+    "stripe": "^12.18.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }
