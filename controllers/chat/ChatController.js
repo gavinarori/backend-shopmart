@@ -265,7 +265,7 @@ class chatController {
 
             const data = await sellerCustomerModel.findOne({ myId: senderId })
             let myFriends = data.myFriends
-            let index = myFriends.findIndex(f => f.fdId === receverId)
+            let index = myFriends.findIndex(f => f.fdId === receiverId)
             while (index > 0) {
                 let temp = myFriends[index]
                 myFriends[index] = myFriends[index - 1]
@@ -280,7 +280,7 @@ class chatController {
                     myFriends
                 }
             )
-            const data1 = await sellerCustomerModel.findOne({ myId: receverId })
+            const data1 = await sellerCustomerModel.findOne({ myId: receiverId })
             let myFriends1 = data1.myFriends
             let index1 = myFriends1.findIndex(f => f.fdId === senderId)
 
@@ -293,7 +293,7 @@ class chatController {
 
             await sellerCustomerModel.updateOne(
                 {
-                    myId: receverId
+                    myId: receiverId
                 },
                 {
                     myFriends1
