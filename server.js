@@ -13,7 +13,7 @@ const socket = require('socket.io')
 const server = http.createServer(app)
 
 app.use(cors({
-    origin: ["https://tractor-dashboard.vercel.app","https://tractor-hub.netlify.app",'https://tractor-client.vercel.app','https://dashboard-tractor-hub.netlify.app' ],
+    origin: ["http://localhost:3000","" ],
     credentials: true
 }))
 
@@ -147,10 +147,18 @@ app.use((req, res, next) => {
 });
 
 
+app.use('/api', require('./routes/chatRoutes'))
 
 
+app.use('/api', require('./routes/dashboard/dashboardIndexRoutes'))
 
+app.use('/api/home', require('./routes/home/homeRoutes'))
+app.use('/api', require('./routes/home/cardRoutes'))
 app.use('/api', require('./routes/authRoutes'))
+app.use('/api', require('./routes/home/customerAuthRoutes'))
+app.use('/api', require('./routes/dashboard/sellerRoutes'))
+app.use('/api', require('./routes/dashboard/categoryRoutes'))
+app.use('/api', require('./routes/dashboard/productRoutes'))
 app.get('/', (req, res) => res.send('Hello World!'))
 const port = process.env.PORT
 dbConnect()
