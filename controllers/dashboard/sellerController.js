@@ -132,6 +132,54 @@ class sellerController {
             responseReturn(res, 500, { error: error.message });
         }
     };
+    get_active_sellers = async (req, res) => {
+        const { page = 1, searchValue, parPage = 10 } = req.query;
+    
+        const skipPage = parseInt(parPage) * (parseInt(page) - 1);
+    
+        try {
+            const query = { status: 'approved' }; // Updated to match the schema's `approved` status.
+            if (searchValue) query.$text = { $search: searchValue };
+    
+            const sellers = await sellerModel
+                .find(query)
+                .skip(skipPage)
+                .limit(parseInt(parPage))
+                .sort({ createdAt: -1 });
+    
+            const totalSeller = await sellerModel.countDocuments(query);
+    
+            responseReturn(res, 200, { totalSeller, sellers });
+        } catch (error) {
+            console.error('Error fetching active sellers:', error.message);
+            responseReturn(res, 500, { error: error.message });
+        }
+    };
+    
+    get_deactive_sellers = async (req, res) => {
+        const { page = 1, searchValue, parPage = 10 } = req.query;
+    
+        const skipPage = parseInt(parPage) * (parseInt(page) - 1);
+    
+        try {
+            const query = { status: 'suspended' }; 
+            if (searchValue) query.$text = { $search: searchValue };
+    
+            const sellers = await sellerModel
+                .find(query)
+                .skip(skipPage)
+                .limit(parseInt(parPage))
+                .sort({ createdAt: -1 });
+    
+            const totalSeller = await sellerModel.countDocuments(query);
+    
+            responseReturn(res, 200, { totalSeller, sellers });
+        } catch (error) {
+            console.error('Error fetching deactive sellers:', error.message);
+            responseReturn(res, 500, { error: error.message });
+        }
+    };
+    
 }
 
 module.exports = new sellerController();
