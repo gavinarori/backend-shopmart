@@ -13,7 +13,7 @@ const socket = require('socket.io')
 const server = http.createServer(app)
 
 app.use(cors({
-    origin: ["http://localhost:3000","" ],
+    origin: ["https://tractor-dashboard.vercel.app","https://tractor-hub.netlify.app",'https://tractor-client.vercel.app','https://dashboard-tractor-hub.netlify.app' ],
     credentials: true
 }))
 
