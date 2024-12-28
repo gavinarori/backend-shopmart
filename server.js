@@ -150,7 +150,7 @@ app.use((req, res, next) => {
 app.use('/api', require('./routes/chatRoutes'))
 
 
-app.use('/api', require('./routes/dashboard/dashboardIndexRoutes'))
+app.use('/api', require('./routes/dashboard/ dashboardIndexRoutes'))
 
 app.use('/api/home', require('./routes/home/homeRoutes'))
 app.use('/api', require('./routes/home/cardRoutes'))
