@@ -72,7 +72,6 @@ class authControllers {
                     email,
                     password: await bcrypt.hash(password, 10),
                     method: 'manual',
-                    shopInfo: {}
                 });
                 await sellerCustomerModel.create({
                     myId: seller.id
@@ -82,9 +81,11 @@ class authControllers {
                     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
                 });
                 responseReturn(res, 201, { token, message: 'Register success' });
+                console.log({ token, message: 'Register success' })
             }
-        } catch (error) {
-            responseReturn(res, 500, { error: 'Internal server error' });
+        }  catch (error) {
+            console.error("Seller Register Error:", error);  // Log the actual error
+            responseReturn(res, 500, { error: error.message || 'Internal server error' });
         }
     };
 

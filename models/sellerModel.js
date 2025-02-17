@@ -39,34 +39,8 @@ const sellerSchema = new Schema({
         default: ''
     },
     shopInfo: {
-        name: {
-            type: String,
-            required: true
-        },
-        description: {
-            type: String,
-            default: ''
-        },
-        address: {
-            type: String,
-            required: true
-        },
-        contact: {
-            type: String,
-            required: true
-        },
-        logo: {
-            type: String,
-            default: ''
-        },
-        rating: {
-            type: Number,
-            default: 0
-        },
-        reviews: {
-            type: Number,
-            default: 0
-        }
+        type: Object, // Change to an optional object
+        default: {}   // Make sure it starts as an empty object
     },
     subscription: {
         type: String,
@@ -103,19 +77,5 @@ const sellerSchema = new Schema({
         }
     }
 }, { timestamps: true });
-
-sellerSchema.index({
-    name: 'text',
-    email: 'text',
-    'shopInfo.name': 'text',
-    'shopInfo.description': 'text'
-}, {
-    weights: {
-        name: 5,
-        email: 4,
-        'shopInfo.name': 3,
-        'shopInfo.description': 2
-    }
-});
 
 module.exports = model('sellers', sellerSchema);
