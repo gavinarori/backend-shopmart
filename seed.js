@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const Admin = require('./models/adminModel'); 
 
 
-mongoose.connect('mongodb+srv://gavinarori:g123456@cluster0.7kfoiet.mongodb.net/collections', {
+mongoose.connect('mongodb+srv://arorigavincode:PR5e0w6ZTOwmcjCf@cluster0.isldo.mongodb.net/shopmart-collections', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
@@ -30,12 +30,11 @@ async function addAdmin() {
         await admin.save();
 
         console.log('Admin user created successfully');
-        mongoose.connection.close(); // Close the connection after saving
+        mongoose.connection.close(); 
     } catch (error) {
         console.error('Error creating admin:', error);
         mongoose.connection.close();
     }
 }
 
-// Run the script
 addAdmin();
