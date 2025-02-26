@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require('mongoose')
 
 const sellerSchema = new Schema({
     name: {
@@ -7,8 +7,7 @@ const sellerSchema = new Schema({
     },
     email: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     password: {
         type: String,
@@ -21,17 +20,14 @@ const sellerSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'suspended'],
         default: 'pending'
     },
     payment: {
         type: String,
-        enum: ['inactive', 'active'],
         default: 'inactive'
     },
     method: {
         type: String,
-        enum: ['manual', 'auto'],
         required: true,
     },
     image: {
@@ -39,43 +35,20 @@ const sellerSchema = new Schema({
         default: ''
     },
     shopInfo: {
-        type: Object, // Change to an optional object
-        default: {}   // Make sure it starts as an empty object
-    },
-    subscription: {
-        type: String,
-        enum: ['none', 'basic', 'premium'],
-        default: 'none'
-    },
-    socialLinks: {
-        type: Map,
-        of: String, 
+        type: Object,
         default: {}
     },
-    analytics: {
-        sales: {
-            type: Number,
-            default: 0
-        },
-        productsListed: {
-            type: Number,
-            default: 0
-        },
-        views: {
-            type: Number,
-            default: 0
-        }
-    },
-    preferences: {
-        notifications: {
-            type: Boolean,
-            default: true
-        },
-        promotions: {
-            type: Boolean,
-            default: true
-        }
-    }
-}, { timestamps: true });
+}, { timestamps: true })
 
-module.exports = model('sellers', sellerSchema);
+
+sellerSchema.index({
+    name: 'text',
+    email: 'text'
+}, {
+    weights: {
+        name: 5,
+        email: 4,
+    }
+})
+
+module.exports = model('sellers', sellerSchema)

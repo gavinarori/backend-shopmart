@@ -106,70 +106,54 @@ class authControllers {
     };
 
     profile_image_upload = async (req, res) => {
-        const { id } = req;
-        const form = formidable({ multiples: true });
+        const { id } = req
+        const form = formidable({ multiples: true })
         form.parse(req, async (err, _, files) => {
             cloudinary.config({
                 cloud_name: process.env.cloud_name,
                 api_key: process.env.api_key,
                 api_secret: process.env.api_secret,
                 secure: true
-            });
-            const { image } = files;
+            })
+            const { image } = files
             try {
-                const result = await cloudinary.uploader.upload(image.filepath, { folder: 'profile' });
+                const result = await cloudinary.uploader.upload(image.filepath, { folder: 'profile' })
                 if (result) {
                     await sellerModel.findByIdAndUpdate(id, {
                         image: result.url
-                    });
-                    const userInfo = await sellerModel.findById(id);
-                    responseReturn(res, 201, { message: 'Image upload success', userInfo });
+                    })
+                    const userInfo = await sellerModel.findById(id)
+                    responseReturn(res, 201, { message: 'image upload success', userInfo })
                 } else {
-                    responseReturn(res, 404, { error: 'Image upload failed' });
+                    responseReturn(res, 404, { error: 'image upload failed' })
                 }
             } catch (error) {
-                responseReturn(res, 500, { error: error.message });
+                //console.log(error)
+                responseReturn(res, 500, { error: error.message })
             }
-        });
-    };
+        })
+    }
 
     profile_info_add = async (req, res) => {
-        const { shopName, division, district, sub_district, description, address, contact } = req.body;
+        const { division, district, shopName, sub_district } = req.body;
         const { id } = req;
-        const form = formidable({ multiples: true });
-        form.parse(req, async (err, _, files) => {
-            try {
-                let logoUrl = '';
-                if (files.logo) {
-                    cloudinary.config({
-                        cloud_name: process.env.cloud_name,
-                        api_key: process.env.api_key,
-                        api_secret: process.env.api_secret,
-                        secure: true
-                    });
-                    const logoUpload = await cloudinary.uploader.upload(files.logo.filepath, { folder: 'shop-logos' });
-                    logoUrl = logoUpload.url;
-                }
 
-                await sellerModel.findByIdAndUpdate(id, {
-                    shopInfo: {
-                        name: shopName,
-                        description,
-                        address,
-                        contact,
-                        logo: logoUrl,
-                        division,
-                        district,
-                        sub_district
-                    }
-                });
-                const userInfo = await sellerModel.findById(id);
-                responseReturn(res, 201, { message: 'Profile info added successfully', userInfo });
-            } catch (error) {
-                responseReturn(res, 500, { error: error.message });
-            }
-        });
-    };
+        try {
+            await sellerModel.findByIdAndUpdate(id, {
+                shopInfo: {
+                    shopName,
+                    division,
+                    district,
+                    sub_district
+                }
+            })
+            const userInfo = await sellerModel.findById(id)
+            responseReturn(res, 201, { message: 'Profile info add success', userInfo })
+        } catch (error) {
+            responseReturn(res, 500, { error: error.message })
+        }
+    }
+
 
     logout = async (req, res) => {
         try {
