@@ -12,7 +12,7 @@ class chatController {
             sellerId,
             userId
         } = req.body;
-        //console.log(req.body)
+        
         try {
             if (sellerId !== '') {
                 const seller = await sellerModel.findById(sellerId)
@@ -115,30 +115,14 @@ class chatController {
     }
 
     customer_message_add = async (req, res) => {
-        const {
-            userId,
-            sellerId,
-            name,
-            text,
-            messageType = 'text',
-            attachments = [],
-            isEdited = false,
-            isDeleted = false,
-        } = req.body;
-
+        const { userId, text, sellerId, name } = req.body
         try {
             const message = await sellerCustomerMessage.create({
                 senderId: userId,
                 senderName: name,
-                receiverId: sellerId,
-                message: text,
-                messageType,
-                attachments,
-                metadata: {
-                    isEdited,
-                    isDeleted,
-                },
-            });
+                receverId: sellerId,
+                message: text
+            })
 
             const data = await sellerCustomerModel.findOne({ myId: userId })
             let myFriends = data.myFriends
@@ -238,34 +222,18 @@ class chatController {
     }
 
     seller_message_add = async (req, res) => {
-        const {
-            senderId,
-            receiverId,
-            name,
-            text,
-            messageType = 'text',
-            attachments = [],
-            isEdited = false,
-            isDeleted = false,
-        } = req.body;
-
+        const { senderId, text, receverId, name } = req.body
         try {
             const message = await sellerCustomerMessage.create({
-                senderId,
+                senderId: senderId,
                 senderName: name,
-                receiverId,
-                message: text,
-                messageType,
-                attachments,
-                metadata: {
-                    isEdited,
-                    isDeleted,
-                },
-            });
+                receverId: receverId,
+                message: text
+            })
 
             const data = await sellerCustomerModel.findOne({ myId: senderId })
             let myFriends = data.myFriends
-            let index = myFriends.findIndex(f => f.fdId === receiverId)
+            let index = myFriends.findIndex(f => f.fdId === receverId)
             while (index > 0) {
                 let temp = myFriends[index]
                 myFriends[index] = myFriends[index - 1]
@@ -280,7 +248,7 @@ class chatController {
                     myFriends
                 }
             )
-            const data1 = await sellerCustomerModel.findOne({ myId: receiverId })
+            const data1 = await sellerCustomerModel.findOne({ myId: receverId })
             let myFriends1 = data1.myFriends
             let index1 = myFriends1.findIndex(f => f.fdId === senderId)
 
@@ -293,7 +261,7 @@ class chatController {
 
             await sellerCustomerModel.updateOne(
                 {
-                    myId: receiverId
+                    myId: receverId
                 },
                 {
                     myFriends1
