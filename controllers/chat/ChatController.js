@@ -12,7 +12,7 @@ class chatController {
             sellerId,
             userId
         } = req.body;
-        //console.log(req.body)
+        
         try {
             if (sellerId !== '') {
                 const seller = await sellerModel.findById(sellerId)
