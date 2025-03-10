@@ -140,51 +140,26 @@ class productController {
     };
 
     product_update = async (req, res) => {
-        let {
-            name,
-            description,
-            discount,
-            price,
-            brand,
-            productId,
-            stock,
-            city,
-            state,
-            country,
-            tags,
-            specifications
-        } = req.body;
-
+        let { name, description, discount, price, brand, productId, stock, city, state, country} = req.body;
         name = name.trim();
-        const slug = name.split(' ').join('-');
-
+        name = name.trim()
+        const slug = name.split(' ').join('-')
         try {
-            const finalPrice = price - (price * discount) / 100;
-
             await productModel.findByIdAndUpdate(productId, {
-                name,
-                description,
-                discount,
-                price,
-                brand,
-                stock,
-                slug,
-                finalPrice,
+                name, description, discount, price, brand, productId, stock, slug,
                 location: {
                     city: city.trim(),
                     state: state.trim(),
-                    country: country.trim()
-                },
-                tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-                specifications: specifications ? JSON.parse(specifications) : {}
-            });
-
-            const product = await productModel.findById(productId);
-            responseReturn(res, 200, { product, message: 'Product update success' });
+                    country: country.trim(),
+                }
+            })
+            const product = await productModel.findById(productId)
+            responseReturn(res, 200, { product, message: 'product update success' })
         } catch (error) {
-            responseReturn(res, 500, { error: error.message });
+            responseReturn(res, 500, { error: error.message })
         }
-    };
+    }
+
 
     product_delete = async (req, res) => {
         const { productId } = req.params;
