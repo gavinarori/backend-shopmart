@@ -139,26 +139,40 @@ class productController {
         }
     };
 
-    product_update = async (req, res) => {
-        let { name, description, discount, price, brand, productId, stock, city, state, country} = req.body;
-        name = name.trim();
-        name = name.trim()
-        const slug = name.split(' ').join('-')
+     product_update = async (req, res) => {
         try {
+            let { name, description, discount, price, brand, productId, stock, city, state, country } = req.body;
+    
+            if (!name || !productId) {
+                return responseReturn(res, 400, { error: "Product name and ID are required" });
+            }
+    
+            name = name?.trim();
+            const slug = name.split(" ").join("-");
+    
             await productModel.findByIdAndUpdate(productId, {
-                name, description, discount, price, brand, productId, stock, slug,
+                name, 
+                description, 
+                discount, 
+                price, 
+                brand, 
+                stock, 
+                slug,
                 location: {
-                    city: city.trim(),
-                    state: state.trim(),
-                    country: country.trim(),
+                    city: city?.trim() || "",  
+                    state: state?.trim() || "", 
+                    country: country?.trim() || "" 
                 }
-            })
-            const product = await productModel.findById(productId)
-            responseReturn(res, 200, { product, message: 'product update success' })
+            });
+    
+            const product = await productModel.findById(productId);
+            responseReturn(res, 200, { product, message: "Product update success" });
+    
         } catch (error) {
-            responseReturn(res, 500, { error: error.message })
+            responseReturn(res, 500, { error: error.message });
         }
-    }
+    };
+    
 
 
     product_delete = async (req, res) => {
