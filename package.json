@@ -17,7 +17,8 @@
     "url": "https://github.com/gavinarori/backend-shopmart/issues"
   },
   "homepage": "https://github.com/gavinarori/backend-shopmart#readme",
- "dependencies": {
+  "dependencies": {
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cloudinary": "^1.36.1",

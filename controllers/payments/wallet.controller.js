@@ -17,7 +17,6 @@ const getAccessToken = async () => {
   return response.data.access_token;
 };
 
-// B2C Withdraw Function
 const withdrawFunds = async (req, res) => {
   try {
     const sellerId = req.user._id; // Seller is authenticated
@@ -50,7 +49,6 @@ const withdrawFunds = async (req, res) => {
       { headers: { Authorization: `Bearer ${accessToken}` } }
     );
 
-    // Record transaction as withdrawal
     const transaction = new Transaction({
       buyer: sellerId, // can reuse buyer for withdrawal by seller
       seller: sellerId,

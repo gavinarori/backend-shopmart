@@ -4,16 +4,15 @@ const {
   handleCallback,
   checkPaymentStatus
 } = require("../controllers/payments/paymentController")
-// const auth = require("../../middleware/auth");
+const { authMiddleware } = require('../middlewares/authMiddleware')
+const router = require('express').Router()
 
-const paymentRoutes = express.Router();
 
 // Protected routes
-// paymentRoutes.use(auth);
-paymentRoutes.post("/stkpush", initiateSTKPush);
-paymentRoutes.post("/check-status", checkPaymentStatus);
+router.post("/stkpush",authMiddleware, initiateSTKPush);
+router.post("/check-status",authMiddleware, checkPaymentStatus);
 
-// Public callback endpoint
-paymentRoutes.post("/callback", handleCallback);
+// Public callback
+router.post("/callback", handleCallback);
 
-module.exports = paymentRoutes;
+module.exports = router;
