@@ -9,7 +9,7 @@ module.exports.authMiddleware = async (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
     try {
-        const decodedToken = jwt.verify(token, process.env.SECRET);
+        const decodedToken = jwt.verify(token, process.env.DECODE_SECRET);
         req.role = decodedToken.role;
         req.id = decodedToken.id;
         next();
