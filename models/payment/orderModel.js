@@ -1,9 +1,5 @@
 import mongoose, { Schema,  } from "mongoose"
 
-// Define the Order document interface
-
-
-// Define the Order schema
 const OrderSchema = new Schema({
   paymentId: { type: String, required: true },
   productId: { type: String, required: true },
@@ -23,6 +19,5 @@ const OrderSchema = new Schema({
   updatedAt: { type: Date },
 })
 
-// Create and export the Order model
 export const Order = mongoose.models.Order || mongoose.model("Order", OrderSchema)
 

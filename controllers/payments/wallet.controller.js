@@ -19,7 +19,7 @@ const getAccessToken = async () => {
 
 const withdrawFunds = async (req, res) => {
   try {
-    const sellerId = req.user._id; // Seller is authenticated
+    const sellerId = req.user._id; // (Seller is authenticated)
     const { amount, phone } = req.body;
 
     let wallet = await Wallet.findOne({ seller: sellerId });
@@ -32,10 +32,10 @@ const withdrawFunds = async (req, res) => {
 
     const payload = {
       InitiatorName: "testapi",
-      SecurityCredential: "YOUR_ENCRYPTED_CREDENTIAL", // You get this from Safaricom
+      SecurityCredential: "YOUR_ENCRYPTED_CREDENTIAL", 
       CommandID: "BusinessPayment",
       Amount: amount,
-      PartyA: "600987", // Shortcode
+      PartyA: "600987", 
       PartyB: phone,
       Remarks: "Withdrawal from Wallet",
       QueueTimeOutURL: "https://yourdomain.com/api/b2c/timeout",
@@ -50,7 +50,7 @@ const withdrawFunds = async (req, res) => {
     );
 
     const transaction = new Transaction({
-      buyer: sellerId, // can reuse buyer for withdrawal by seller
+      buyer: sellerId, 
       seller: sellerId,
       amount,
       phone,
@@ -60,7 +60,6 @@ const withdrawFunds = async (req, res) => {
 
     await transaction.save();
 
-    // Deduct from wallet immediately (optional — or wait until callback)
     wallet.balance -= amount;
     wallet.transactions.push(transaction._id);
     await wallet.save();

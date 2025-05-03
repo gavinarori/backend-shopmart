@@ -5,8 +5,8 @@ const Transaction = require("../../models/payment/paymentModel");
 const Wallet = require("../../models/payment/walletModel");
 
 const getAccessToken = async () => {
-  const consumer_key = "YOUR_CONSUMER_KEY";
-  const consumer_secret = "YOUR_CONSUMER_SECRET";
+  const consumer_key = process.env.MPESA_CONSUMER_KEY;
+  const consumer_secret = process.env.MPESA_CONSUMER_SECRET;
   const auth = "Basic " + Buffer.from(consumer_key + ":" + consumer_secret).toString("base64");
 
   const response = await axios.get(
@@ -21,16 +21,23 @@ const initiateSTKPush = async (req, res) => {
   try {
     let phoneNumber = req.body.phone;
     const { amount, sellerId, productId, shopName } = req.body;
-    const buyerId = req.user._id; // from authenticated user
+    const buyerId = req.user._id; 
 
     if (phoneNumber.startsWith("0")) {
       phoneNumber = "254" + phoneNumber.slice(1);
+    } else{
+        return "the phone number provided does not exist, please provide the correct number"
     }
 
+
+
     const accessToken = await getAccessToken();
+    if(!accessToken){
+        return "check your consumer secret or key if it's valid"
+    }
     const timestamp = moment().format("YYYYMMDDHHmmss");
     const password = Buffer.from(
-      "174379" + "YOUR_PASSKEY" + timestamp
+      "174379" + process.env.MPESA_PASSKEY + timestamp
     ).toString("base64");
 
     const response = await axios.post(
@@ -78,7 +85,7 @@ const initiateSTKPush = async (req, res) => {
   }
 };
 
-// Handle M-Pesa Callback
+//  M-Pesa Callback
 const handleCallback = async (req, res) => {
   try {
     const callbackData = req.body.Body.stkCallback;
@@ -121,7 +128,6 @@ const handleCallback = async (req, res) => {
   }
 };
 
-// Check Payment Status
 const checkPaymentStatus = async (req, res) => {
   try {
     const transaction = await Transaction.findOne({

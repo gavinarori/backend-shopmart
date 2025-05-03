@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const transactionSchema = new mongoose.Schema({
   buyer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // The buyer
+    ref: "User",
     required: true
   },
   seller: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // The seller
+    ref: "User", 
     required: true
   },
   shopName: {
@@ -17,7 +17,7 @@ const transactionSchema = new mongoose.Schema({
   },
   product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product", // The purchased product
+    ref: "Product", 
     required: true
   },
   amount: {
