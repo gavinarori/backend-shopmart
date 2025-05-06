@@ -19,16 +19,11 @@ const getAccessToken = async () => {
 
 const initiateSTKPush = async (req, res) => {
   try {
-    let phoneNumber = req.body.phone;
-    const { amount, sellerId, productId, shopName } = req.body;
-    const buyerId = req.user._id; 
+  
+    const { amount, sellerId, productId, shopName,buyerId ,phone  } = req.body;
 
-    if (phoneNumber.startsWith("0")) {
-      phoneNumber = "254" + phoneNumber.slice(1);
-    } else{
-        return "the phone number provided does not exist, please provide the correct number"
-    }
 
+   
 
 
     const accessToken = await getAccessToken();
@@ -48,10 +43,10 @@ const initiateSTKPush = async (req, res) => {
         Timestamp: timestamp,
         TransactionType: "CustomerPayBillOnline",
         Amount: amount,
-        PartyA: phoneNumber,
+        PartyA: phone,
         PartyB: "174379",
-        PhoneNumber: phoneNumber,
-        CallBackURL: "https://yourdomain.com/api/callback",
+        PhoneNumber: phone,
+        CallBackURL: "https://6f05-102-68-79-185.ngrok-free.app/api/callback",
         AccountReference: shopName,
         TransactionDesc: "Purchase on " + shopName
       },
@@ -64,7 +59,7 @@ const initiateSTKPush = async (req, res) => {
       product: productId,
       shopName,
       amount,
-      phone: phoneNumber,
+      phone: phone,
       merchantRequestID: response.data.MerchantRequestID,
       checkoutRequestID: response.data.CheckoutRequestID,
       status: 'pending'
