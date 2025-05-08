@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 require('dotenv').config()
 const socket = require('socket.io')
+const { initializeWebSocketServer } = require("./utiles/websocket")
 
 const server = http.createServer(app)
 
@@ -21,6 +22,8 @@ const io = socket(server, {
         credentials: true
     }
 })
+// Initialize WebSocket server
+initializeWebSocketServer(server)
 
 // ---------------------------
 // Active Users Data
