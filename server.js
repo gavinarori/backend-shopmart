@@ -14,8 +14,8 @@ const server = http.createServer(app)
 app.use(cors({
     origin: [
         "http://localhost:3000",
-        "https://client-shopmart.vercel.app",
-        "https://sellershopmart.vercel.app"
+        "https://client-shopmart.vercel.app/",
+        "https://sellershopmart.vercel.app/"
     ],
     credentials: true
 }))
@@ -23,10 +23,15 @@ app.use(cors({
 
 const io = socket(server, {
     cors: {
-        origin: '*',
+        origin: [
+            "http://localhost:3000",
+            "https://client-shopmart.vercel.app/",
+            "https://sellershopmart.vercel.app/"
+        ],
         credentials: true
     }
 })
+
 // Initialize WebSocket server
 initializeWebSocketServer(server)
 
