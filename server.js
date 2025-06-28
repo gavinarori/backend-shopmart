@@ -12,9 +12,14 @@ const { initializeWebSocketServer } = require("./utiles/websocket")
 const server = http.createServer(app)
 
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+        "http://localhost:3000",
+        "https://client-shopmart.vercel.app",
+        "https://sellershopmart.vercel.app"
+    ],
     credentials: true
 }))
+
 
 const io = socket(server, {
     cors: {
