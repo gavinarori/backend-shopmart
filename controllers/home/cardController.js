@@ -73,16 +73,22 @@ class cardController {
             let buy_product_item = 0
             let calculatePrice = 0;
             let card_product_count = 0;
-            const outOfStockProduct = card_products.filter(p => p.products[0].stock < p.quantity)
-            for (let i = 0; i < outOfStockProduct.length; i++) {
-                card_product_count = card_product_count + outOfStockProduct[i].quantity
+            
+            // Include all products, not just in-stock ones
+            const allProducts = card_products.filter(p => p.products && p.products.length > 0)
+            const outOfStockProduct = allProducts.filter(p => p.products[0].stock < p.quantity)
+            const stockProduct = allProducts.filter(p => p.products[0].stock >= p.quantity)
+            
+            // Count all products for display
+            for (let i = 0; i < allProducts.length; i++) {
+                card_product_count = card_product_count + allProducts[i].quantity
             }
-            const stockProduct = card_products.filter(p => p.products[0].stock >= p.quantity)
+            
+            // Calculate price only for in-stock products
             for (let i = 0; i < stockProduct.length; i++) {
                 const {
                     quantity
                 } = stockProduct[i]
-                card_product_count = card_product_count + quantity
                 buy_product_item = buy_product_item + quantity
                 const {
                     price,
@@ -94,13 +100,19 @@ class cardController {
                     calculatePrice = calculatePrice + quantity * price
                 }
             }
+            
             let p = []
-            let unique = [...new Set(stockProduct.map(p => p.products[0].sellerId.toString()))]
+            let unique = [...new Set(allProducts.map(p => p.products[0].sellerId.toString()))]
             for (let i = 0; i < unique.length; i++) {
                 let price = 0;
-                for (let j = 0; j < stockProduct.length; j++) {
-                    const tempProduct = stockProduct[j].products[0]
-                    if (unique[i] === tempProduct.sellerId.toString()) {
+                let sellerProducts = allProducts.filter(p => p.products[0].sellerId.toString() === unique[i])
+                
+                for (let j = 0; j < sellerProducts.length; j++) {
+                    const tempProduct = sellerProducts[j].products[0]
+                    const isOutOfStock = tempProduct.stock < sellerProducts[j].quantity
+                    
+                    // Only add to price calculation if in stock
+                    if (!isOutOfStock) {
                         let pri = 0;
                         if (tempProduct.discount !== 0) {
                             pri = tempProduct.price - Math.floor((tempProduct.price * tempProduct.discount) / 100)
@@ -108,29 +120,31 @@ class cardController {
                             pri = tempProduct.price
                         }
                         pri = pri - Math.floor((pri * co) / 100)
-                        price = price + pri * stockProduct[j].quantity
+                        price = price + pri * sellerProducts[j].quantity
+                    }
+                    
+                    // Add to products array regardless of stock status
+                    if (!p[i]) {
                         p[i] = {
                             sellerId: unique[i],
                             shopName: tempProduct.shopName,
-                            price,
-                            products: p[i] ? [
-                                ...p[i].products,
-                                {
-                                    _id: stockProduct[j]._id,
-                                    quantity: stockProduct[j].quantity,
-                                    productInfo: tempProduct
-                                }
-                            ] : [{
-                                _id: stockProduct[j]._id,
-                                quantity: stockProduct[j].quantity,
-                                productInfo: tempProduct
-
-                            }]
+                            price: 0, // Will be calculated for in-stock items
+                            products: []
                         }
                     }
-
+                    
+                    p[i].products.push({
+                        _id: sellerProducts[j]._id,
+                        quantity: sellerProducts[j].quantity,
+                        productInfo: tempProduct,
+                        isOutOfStock: isOutOfStock
+                    })
                 }
+                
+                // Set the final price for this seller
+                p[i].price = price
             }
+            
             responseReturn(res, 200, {
                 card_products: p,
                 price: calculatePrice,
@@ -142,6 +156,9 @@ class cardController {
 
         } catch (error) {
             console.log(error.message)
+            responseReturn(res, 500, {
+                error: 'Failed to get cart products'
+            })
         }
     }
 
